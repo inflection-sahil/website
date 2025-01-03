@@ -1,6 +1,6 @@
 module "s3" {
-  #   source = "github.com/sahilphule/templates/terraform/modules/aws/s3"
-  source = "../../../../templates/terraform/modules/aws/s3"
+  source = "github.com/sahilphule/templates/terraform/modules/aws/s3"
+  # source = "../../../../templates/terraform/modules/aws/s3"
 
   s3-bucket-properties = local.s3-bucket-properties
 }
@@ -38,8 +38,8 @@ resource "aws_s3_bucket_website_configuration" "static" {
 }
 
 module "cloudfront" {
-  # source = "github.com/sahilphule/templates/terraform/modules/aws/cloudfront"
-  source = "../../../../templates/terraform/modules/aws/cloudfront"
+  source = "github.com/sahilphule/templates/terraform/modules/aws/cloudfront"
+  # source = "../../../../templates/terraform/modules/aws/cloudfront"
 
   cloudfront-properties          = local.cloudfront-properties
   s3-bucket-regional-domain-name = local.s3-bucket-regional-domain-name
@@ -47,5 +47,17 @@ module "cloudfront" {
 
   depends_on = [
     module.s3
+  ]
+}
+
+module "route53-record" {
+  source = "github.com/sahilphule/templates/terraform/modules/aws/route53-record"
+  # source = "../../../../templates/terraform/modules/aws/route53-record"
+
+  route53-record-properties = local.route53-record-properties
+  route53-zone-id           = local.route53-zone-id
+
+  depends_on = [
+    module.cloudfront
   ]
 }
